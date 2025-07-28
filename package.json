@@ -1,0 +1,24 @@
+{
+  "name": "otus-qajs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "lint:ci": "eslint .",
+    "lint": "eslint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "codestyle": "run-s format lint"
+  },
+  "author": "Iaroslav Sannikov <sannikov.iaroslav@gmail.com>",
+  "keywords": [],
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "npm-run-all2": "^7.0.2",
+    "prettier": "^3.4.2"
+  }
+}
