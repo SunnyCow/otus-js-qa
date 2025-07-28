@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/main.js",
-    "lint:ci": "eslint .",  
+    "lint:ci": "eslint .",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "codestyle": "run-s format lint"
   },
   "author": "Iaroslav Sannikov <sannikov.iaroslav@gmail.com>",
   "keywords": [],
