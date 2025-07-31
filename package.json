@@ -26,6 +26,7 @@
     "prettier": "^3.4.2"
   },
   "dependencies": {
+    "eslint-plugin-jest": "^29.0.1",
     "jest": "^30.0.5"
   }
 }
