@@ -11,17 +11,19 @@ describe('Bookstore API - User creation tests', () => {
 
     await axios.post(`${baseUrl}/User`, credentials).catch(() => {});
 
-    const response = await axios.post(`${baseUrl}/User`, credentials).catch(error => error.response);
+    const response = await axios.post(`${baseUrl}/User`, credentials).catch((error) => error.response);
 
     expect(response.status).toBe(406);
     expect(response.data.message).toBe('User exists!');
   });
 
   test('should fail to create user with weak password', async () => {
-    const response = await axios.post(`${baseUrl}/User`, {
-      userName: 'weakPasswordUser',
-      password: '0123'
-    }).catch(error => error.response);
+    const response = await axios
+      .post(`${baseUrl}/User`, {
+        userName: 'weakPasswordUser',
+        password: '0123'
+      })
+      .catch((error) => error.response);
 
     expect(response.status).toBe(400);
     expect(response.data.message).toMatch(/Passwords must have/);
@@ -45,10 +47,12 @@ describe('Bookstore API - token tests', () => {
   test('should fail to generate token with invalid credentials', async () => {
     const userName = `user${Date.now()}`;
 
-    const response = await axios.post(`${baseUrl}/GenerateToken`, {
-      userName: userName,
-      password: 'randompass'
-    }).catch(error => error.response);
+    const response = await axios
+      .post(`${baseUrl}/GenerateToken`, {
+        userName: userName,
+        password: 'randompass'
+      })
+      .catch((error) => error.response);
 
     expect(response.status).toBe(200);
     expect(response.data.status).toBe('Failed');
@@ -59,7 +63,7 @@ describe('Bookstore API - token tests', () => {
     const credentials = {
       userName: `user${Date.now()}`,
       password: 'userStrongPass123!'
-    }
+    };
 
     await axios.post(`${baseUrl}/User`, credentials);
 
@@ -69,4 +73,4 @@ describe('Bookstore API - token tests', () => {
     expect(response.data.status).toBe('Success');
     expect(response.data).toHaveProperty('token');
   });
-})
+});
