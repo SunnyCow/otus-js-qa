@@ -40,3 +40,33 @@ describe('Bookstore API - User creation tests', () => {
     expect(response.data.username).toBe(userName);
   });
 });
+
+describe('Bookstore API - token tests', () => {
+  test('should fail to generate token with invalid credentials', async () => {
+    const userName = `user${Date.now()}`;
+
+    const response = await axios.post(`${baseUrl}/GenerateToken`, {
+      userName: userName,
+      password: 'randompass'
+    }).catch(error => error.response);
+
+    expect(response.status).toBe(200);
+    expect(response.data.status).toBe('Failed');
+    expect(response.data.result).toMatch(/User authorization failed/);
+  });
+
+  test('should generate token with valid credentials', async () => {
+    const credentials = {
+      userName: `user${Date.now()}`,
+      password: 'userStrongPass123!'
+    }
+
+    await axios.post(`${baseUrl}/User`, credentials);
+
+    const response = await axios.post(`${baseUrl}/GenerateToken`, credentials);
+
+    expect(response.status).toBe(200);
+    expect(response.data.status).toBe('Success');
+    expect(response.data).toHaveProperty('token');
+  });
+})
