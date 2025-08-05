@@ -38,3 +38,28 @@ export const getTotal = (items = [], discount = 0) => {
   const total = items.reduce((acc, { price, quantity }) => acc + price * quantity, 0);
   return total * (1 - discount / 100);
 };
+
+/**
+ * Подсчёт общего количества очков
+ *
+ * @param {{[key: string]}: number} scores
+ * @returns {number}
+ * @throws {TypeError} Вернёт ошибку, если был передан не объект
+ * @throws {TypeError} Вернёт ошибку, если объект содержит что-то, кроме чисел
+ */
+export const getScore = (scores) => {
+  if (typeof scores !== 'object' || scores === null || Array.isArray(scores)) {
+    throw new TypeError('Argument is not an object');
+  }
+
+  let totalScore = 0;
+
+  for (let score in scores) {
+    if (typeof scores[score] !== 'number' || Number.isNaN(scores[score])) {
+      throw new TypeError('The object must only contain numbers');
+    }
+    totalScore += scores[score];
+  }
+
+  return totalScore;
+};
