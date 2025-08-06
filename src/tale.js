@@ -21,7 +21,7 @@ function newYear(name) {
   }
 }
 
-console.log('\n')
+console.log('\n');
 console.log(`kolobok() function
 ------------------`);
 console.log(kolobok('дедушка'));
