@@ -1,4 +1,4 @@
-import { nameIsValid, fullTrim, getTotal } from '../src/app.js';
+import { nameIsValid, fullTrim, getTotal, getScore } from '../src/app.js';
 
 describe('nameIsValid function', () => {
   const validCases = ['dudoser', 'fr'];
@@ -69,5 +69,33 @@ describe('getTotal function', () => {
 
   test.each(nonNumericDiscounts)('should throw error if discount is non-numeric: %p', (input) => {
     expect(() => getTotal([{ price: 10, quantity: 1 }], input)).toThrow('Скидка должна быть числом');
+  });
+});
+
+describe('getScore function', () => {
+  const nonObjectInput = [null, NaN, undefined, 'score', 777, []];
+  const invalidObjects = [
+    { Rory: 50, Rose: null },
+    { Alexander: NaN, Skeleton: 666 },
+    { Chipi: 21, Chapa: 'string' },
+    { Beaver: 33, Squirrel: undefined },
+    { Mulder: 27, Skully: [] }
+  ];
+
+  test('should retrun sum of scores when provided valid object', () => {
+    const scores = {
+      Alice: 50,
+      Slash: 28,
+      Rainbow: 55
+    };
+    expect(getScore(scores)).toBe(50 + 28 + 55);
+  });
+
+  test.each(nonObjectInput)('should throw an error if input is not an object: %p', (input) => {
+    expect(() => getScore(input)).toThrow(TypeError('Argument is not an object'));
+  });
+
+  test.each(invalidObjects)('should throw an error if object contains values other than numbers: %p', (input) => {
+    expect(() => getScore(input)).toThrow(TypeError('The object must only contain numbers'));
   });
 });
