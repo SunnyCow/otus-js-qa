@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const baseUrl = 'https://bookstore.demoqa.com/Account/v1';
+import httpClient from "../axios.config";
 
 describe('Bookstore API - User creation tests', () => {
   test('should fail to create user if username is already taken', async () => {
@@ -9,17 +7,17 @@ describe('Bookstore API - User creation tests', () => {
       password: 'Dud0$e4!'
     };
 
-    await axios.post(`${baseUrl}/User`, credentials).catch(() => {});
+    await httpClient.post(`/User`, credentials);
 
-    const response = await axios.post(`${baseUrl}/User`, credentials).catch((error) => error.response);
+    const response = await httpClient.post(`/User`, credentials);
 
     expect(response.status).toBe(406);
     expect(response.data.message).toBe('User exists!');
   });
 
   test('should fail to create user with weak password', async () => {
-    const response = await axios
-      .post(`${baseUrl}/User`, {
+    const response = await httpClient
+      .post(`/User`, {
         userName: 'weakPasswordUser',
         password: '0123'
       })
@@ -32,7 +30,7 @@ describe('Bookstore API - User creation tests', () => {
   test('should create user', async () => {
     const userName = `user${Date.now()}`;
 
-    const response = await axios.post(`${baseUrl}/User`, {
+    const response = await httpClient.post(`/User`, {
       userName: userName,
       password: 'Password123!'
     });
@@ -47,8 +45,8 @@ describe('Bookstore API - token tests', () => {
   test('should fail to generate token with invalid credentials', async () => {
     const userName = `user${Date.now()}`;
 
-    const response = await axios
-      .post(`${baseUrl}/GenerateToken`, {
+    const response = await httpClient
+      .post(`/GenerateToken`, {
         userName: userName,
         password: 'randompass'
       })
@@ -65,9 +63,9 @@ describe('Bookstore API - token tests', () => {
       password: 'userStrongPass123!'
     };
 
-    await axios.post(`${baseUrl}/User`, credentials);
+    await httpClient.post(`/User`, credentials);
 
-    const response = await axios.post(`${baseUrl}/GenerateToken`, credentials);
+    const response = await httpClient.post(`/GenerateToken`, credentials);
 
     expect(response.status).toBe(200);
     expect(response.data.status).toBe('Success');
