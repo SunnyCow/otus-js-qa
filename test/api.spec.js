@@ -1,56 +1,54 @@
-import httpClient from "../axios.config";
+import config from "../framework/config/config";
+import UserService from "../framework/services/UserService";
+import AuthService from "../framework/services/AuthService";
+import { generateUserCredentials } from "../framework/fixtures/userFixture";
 
 describe('Bookstore API - User creation tests', () => {
   test('should fail to create user if username is already taken', async () => {
     const credentials = {
-      userName: 'dudoser',
-      password: 'Dud0$e4!'
+      username: config.username,
+      password: config.password
     };
 
-    await httpClient.post(`/User`, credentials);
+    await UserService.create(credentials);
 
-    const response = await httpClient.post(`/User`, credentials);
+    const response = await UserService.create(credentials);
 
     expect(response.status).toBe(406);
     expect(response.data.message).toBe('User exists!');
   });
 
   test('should fail to create user with weak password', async () => {
-    const response = await httpClient
-      .post(`/User`, {
-        userName: 'weakPasswordUser',
+    const response = await UserService.create({
+        username: 'weakPasswordUser',
         password: '0123'
-      })
-      .catch((error) => error.response);
+      });
 
     expect(response.status).toBe(400);
     expect(response.data.message).toMatch(/Passwords must have/);
   });
 
   test('should create user', async () => {
-    const userName = `user${Date.now()}`;
+    const user = generateUserCredentials();
 
-    const response = await httpClient.post(`/User`, {
-      userName: userName,
-      password: 'Password123!'
-    });
+    const response = await UserService.create(user);
 
     expect(response.status).toBe(201);
     expect(response.data).toHaveProperty('userID');
-    expect(response.data.username).toBe(userName);
+    expect(response.data.username).toBe(user.username);
   });
+
 });
 
 describe('Bookstore API - token tests', () => {
   test('should fail to generate token with invalid credentials', async () => {
-    const userName = `user${Date.now()}`;
+    const username = `user${Date.now()}`;
+    const password = '123';
 
-    const response = await httpClient
-      .post(`/GenerateToken`, {
-        userName: userName,
-        password: 'randompass'
-      })
-      .catch((error) => error.response);
+    const response = await AuthService.generateToken({
+      username,
+      password
+    });
 
     expect(response.status).toBe(200);
     expect(response.data.status).toBe('Failed');
@@ -58,17 +56,14 @@ describe('Bookstore API - token tests', () => {
   });
 
   test('should generate token with valid credentials', async () => {
-    const credentials = {
-      userName: `user${Date.now()}`,
-      password: 'userStrongPass123!'
-    };
+    const credentials = generateUserCredentials();
 
-    await httpClient.post(`/User`, credentials);
+    await UserService.create(credentials);
 
-    const response = await httpClient.post(`/GenerateToken`, credentials);
+    const response = await AuthService.generateToken(credentials);
 
     expect(response.status).toBe(200);
     expect(response.data.status).toBe('Success');
-    expect(response.data).toHaveProperty('token');
+    expect(response.data.token).toBeDefined();
   });
 });
