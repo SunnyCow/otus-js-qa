@@ -5,4 +5,4 @@ export default Object.freeze({
   userId: process.env.BOOKSTORE_USER_ID,
   username: process.env.BOOKSTORE_USERNAME,
   password: process.env.BOOKSTORE_PASSWORD
-})
+});
