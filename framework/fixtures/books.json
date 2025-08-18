@@ -1,0 +1,114 @@
+{
+  "books": [
+    {
+      "isbn": "9781449325862",
+      "title": "Git Pocket Guide",
+      "subTitle": "A Working Introduction",
+      "author": "Richard E. Silverman",
+      "publish_date": "2020-06-04T08:48:39.000Z",
+      "publisher": "O'Reilly Media",
+      "pages": 234,
+      "description": "This pocket guide is the perfect on-the-job companion to Git, the distributed version control system. It provides a compact, readable introduction to Git for new users, as well as a reference to common commands and procedures for experienced users.",
+      "website": "http://chimera.labs.oreilly.com/books/1230000000561/index.html"
+    },
+    {
+      "isbn": "9781491950296",
+      "title": "Learning React",
+      "subTitle": "Functional Web Development with React and Redux",
+      "author": "Alex Banks, Eve Porcello",
+      "publish_date": "2021-02-15T09:20:00.000Z",
+      "publisher": "O'Reilly Media",
+      "pages": 350,
+      "description": "A hands-on guide to building modern web applications using React and Redux. Covers components, state management, hooks, and best practices.",
+      "website": "https://learning.oreilly.com/library/view/learning-react-2nd/9781492051718/"
+    },
+    {
+      "isbn": "9780134685991",
+      "title": "Effective Java",
+      "subTitle": "Programming Language Guide",
+      "author": "Joshua Bloch",
+      "publish_date": "2018-01-11T10:30:00.000Z",
+      "publisher": "Addison-Wesley",
+      "pages": 416,
+      "description": "Comprehensive best practices for writing robust, maintainable, and efficient Java code.",
+      "website": "https://www.pearson.com/en-us/subject-catalog/p/effective-java/P200000003195/9780134685991"
+    },
+    {
+      "isbn": "9780596517748",
+      "title": "JavaScript: The Good Parts",
+      "subTitle": "Unearthing the Excellence in JavaScript",
+      "author": "Douglas Crockford",
+      "publish_date": "2008-05-15T07:00:00.000Z",
+      "publisher": "O'Reilly Media",
+      "pages": 176,
+      "description": "An essential guide to the best features of JavaScript, helping developers write cleaner and more reliable code.",
+      "website": "https://www.oreilly.com/library/view/javascript-the-good/9780596517748/"
+    },
+    {
+      "isbn": "9780132350884",
+      "title": "Clean Code",
+      "subTitle": "A Handbook of Agile Software Craftsmanship",
+      "author": "Robert C. Martin",
+      "publish_date": "2008-08-01T10:00:00.000Z",
+      "publisher": "Prentice Hall",
+      "pages": 464,
+      "description": "This book offers practical advice on writing cleaner, more maintainable software with examples in Java.",
+      "website": "https://www.pearson.com/en-us/subject-catalog/p/clean-code/P200000002195/9780132350884"
+    },
+    {
+      "isbn": "9780201633610",
+      "title": "Design Patterns",
+      "subTitle": "Elements of Reusable Object-Oriented Software",
+      "author": "Erich Gamma, Richard Helm, Ralph Johnson, John Vlissides",
+      "publish_date": "1994-10-31T09:00:00.000Z",
+      "publisher": "Addison-Wesley",
+      "pages": 395,
+      "description": "The classic book introducing software design patterns, with solutions to common design challenges.",
+      "website": "https://www.pearson.com/en-us/subject-catalog/p/design-patterns/P200000002456/9780201633610"
+    },
+    {
+      "isbn": "9781617294136",
+      "title": "Spring in Action",
+      "subTitle": "Covers Spring 5",
+      "author": "Craig Walls",
+      "publish_date": "2018-09-10T08:00:00.000Z",
+      "publisher": "Manning Publications",
+      "pages": 520,
+      "description": "Comprehensive guide to building enterprise Java applications with the Spring framework.",
+      "website": "https://www.manning.com/books/spring-in-action-fifth-edition"
+    },
+    {
+      "isbn": "9780137081073",
+      "title": "Continuous Delivery",
+      "subTitle": "Reliable Software Releases through Build, Test, and Deployment Automation",
+      "author": "Jez Humble, David Farley",
+      "publish_date": "2010-07-27T07:00:00.000Z",
+      "publisher": "Addison-Wesley",
+      "pages": 512,
+      "description": "A foundational book on DevOps practices, CI/CD pipelines, and deployment automation.",
+      "website": "https://www.pearson.com/en-us/subject-catalog/p/continuous-delivery/P200000002498/9780321601919"
+    },
+    {
+      "isbn": "9781492078004",
+      "title": "Kubernetes: Up and Running",
+      "subTitle": "Dive into the Future of Infrastructure",
+      "author": "Brendan Burns, Joe Beda, Kelsey Hightower",
+      "publish_date": "2021-03-10T10:00:00.000Z",
+      "publisher": "O'Reilly Media",
+      "pages": 350,
+      "description": "Practical guide to running containerized applications using Kubernetes, written by its creators.",
+      "website": "https://learning.oreilly.com/library/view/kubernetes-up-and/9781492077991/"
+    },
+    {
+      "isbn": "9780262033848",
+      "title": "Introduction to Algorithms",
+      "subTitle": "The 'CLRS' Standard Textbook",
+      "author": "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein",
+      "publish_date": "2009-07-31T08:00:00.000Z",
+      "publisher": "MIT Press",
+      "pages": 1312,
+      "description": "The definitive textbook on algorithms, widely used in universities worldwide.",
+      "website": "https://mitpress.mit.edu/9780262033848/introduction-to-algorithms/"
+    }
+  ]
+}
