@@ -1,6 +1,6 @@
 import httpClient from './HttpClient';
 
-const getUser = async (userId, token) => {
+const get = async (userId, token) => {
   const response = await httpClient.get(`/Account/v1/User/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -14,7 +14,7 @@ const getUser = async (userId, token) => {
   };
 };
 
-const createUser = async ({ username, password }) => {
+const create = async ({ username, password }) => {
   const response = await httpClient.post(`/Account/v1/User`, {
     userName: username,
     password: password
@@ -27,8 +27,8 @@ const createUser = async ({ username, password }) => {
   };
 };
 
-const deleteUser = async (userId, token) => {
-  const response = await httpClient.delete(`/Account/v1/User/${userId}`, {
+const remove = async (userId, token) => {
+  const response = await httpClient.remove(`/Account/v1/User/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }
@@ -41,8 +41,4 @@ const deleteUser = async (userId, token) => {
   };
 };
 
-export default {
-  get: getUser,
-  create: createUser,
-  delete: deleteUser
-};
+export default { get, create, remove };
