@@ -1,6 +1,10 @@
 import httpClient from './HttpClient';
 
 const add = async ({ userId, isbns, token }) => {
+  if (!Array.isArray(isbns)) {
+    isbns = [isbns];
+  }
+
   const response = await httpClient.post(
     `/BookStore/v1/Books`,
     {
@@ -42,7 +46,7 @@ const replace = async ({ isbn, replaceIsbn, userId, token }) => {
   };
 };
 
-const get = async (isbn) => {
+const get = async ({ isbn }) => {
   const response = await httpClient.get(`/BookStore/v1/Book?ISBN=${isbn}`);
 
   return {
