@@ -1,6 +1,6 @@
 import httpClient from './HttpClient';
 
-const replace = async ({ userId, isbns, token }) => {
+const add = async ({ userId, isbns, token }) => {
   const response = await httpClient.post(
     `/BookStore/v1/Books`,
     {
@@ -21,7 +21,7 @@ const replace = async ({ userId, isbns, token }) => {
   };
 };
 
-const add = async ({ isbn, replaceIsbn, userId, token }) => {
+const replace = async ({ isbn, replaceIsbn, userId, token }) => {
   const response = await httpClient.put(
     `/BookStore/v1/Books/${isbn}`,
     {
@@ -34,6 +34,7 @@ const add = async ({ isbn, replaceIsbn, userId, token }) => {
       }
     }
   );
+
   return {
     headers: response.headers,
     status: response.status,
@@ -41,4 +42,46 @@ const add = async ({ isbn, replaceIsbn, userId, token }) => {
   };
 };
 
-export default { replace, add };
+const get = async (isbn) => {
+  const response = await httpClient.get(`/BookStore/v1/Book?ISBN=${isbn}`);
+
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.data
+  };
+};
+
+const removeOne = async ({ isbn, userId, token }) => {
+  const response = await httpClient.delete(`/BookStore/v1/Book`, {
+    data: {
+      isbn,
+      userId
+    },
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.data
+  };
+};
+
+const removeAll = async ({ userId, token }) => {
+  const response = await httpClient.delete(`/BookStore/v1/Books?UserId=${userId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+
+  return {
+    headers: response.headers,
+    status: response.status,
+    data: response.data
+  };
+};
+
+export default { replace, add, get, removeOne, removeAll };
