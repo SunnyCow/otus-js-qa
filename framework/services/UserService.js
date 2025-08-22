@@ -1,6 +1,6 @@
 import httpClient from './HttpClient';
 
-const get = async (userId, token) => {
+const get = async ({ userId, token }) => {
   const response = await httpClient.get(`/Account/v1/User/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`
@@ -27,7 +27,7 @@ const create = async ({ username, password }) => {
   };
 };
 
-const remove = async (userId, token) => {
+const remove = async ({ userId, token }) => {
   const response = await httpClient.remove(`/Account/v1/User/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`
