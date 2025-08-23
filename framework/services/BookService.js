@@ -1,9 +1,7 @@
 import httpClient from './HttpClient';
 
 const add = async ({ userId, isbns, token }) => {
-  if (!Array.isArray(isbns)) {
-    isbns = [isbns];
-  }
+  isbns = Array.isArray(isbns) ? isbns : [isbns];
 
   const response = await httpClient.post(
     `/BookStore/v1/Books`,
@@ -88,4 +86,10 @@ const removeAll = async ({ userId, token }) => {
   };
 };
 
-export default { replace, add, get, removeOne, removeAll };
+export default {
+  replace,
+  add,
+  get,
+  removeOne,
+  removeAll
+};
