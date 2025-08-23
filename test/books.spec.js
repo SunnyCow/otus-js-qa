@@ -3,11 +3,8 @@ import UserService from '../framework/services/UserService';
 import createAndAuthUser from '../framework/utils/createAndAuthUser';
 import BookProvider from '../framework/utils/BookProvider';
 
-describe('Bookstore API - bookstore tests', () => {
-  const isbnsArray = [
-    [BookProvider.getRange(0, 1).map((book) => book.isbn)],
-    [BookProvider.getRange(1, 3).map((book) => book.isbn)]
-  ];
+describe('Bookstore API - Find book, add book tests', () => {
+  const isbnsArray = [BookProvider.getRandomIsbn(), BookProvider.getIsbns(4)];
 
   test.each(isbnsArray)('should add books %s', async (isbns) => {
     const { userResponse, tokenResponse } = await createAndAuthUser();
@@ -15,8 +12,9 @@ describe('Bookstore API - bookstore tests', () => {
     const token = tokenResponse.data.token;
 
     const response = await BookService.add({ userId, isbns, token });
+    const expectedIsbns = Array.isArray(isbns) ? isbns : [isbns];
 
-    expect(response.data).toEqual({ books: isbns.map((isbn) => ({ isbn })) });
+    expect(response.data).toEqual({ books: expectedIsbns.map((isbn) => ({ isbn })) });
   });
 
   test('should replace book', async () => {
@@ -59,11 +57,19 @@ describe('Bookstore API - bookstore tests', () => {
     expect(response.status).toBe(400);
     expect(response.data.message).toMatch(/ISBN supplied is not/);
   });
+});
+
+describe('Book removal tests', () => {
+  let userId;
+  let token;
+
+  beforeEach(async () => {
+    const { userResponse, tokenResponse } = await createAndAuthUser();
+    userId = userResponse.data.userID;
+    token = tokenResponse.data.token;
+  });
 
   test('should delete one book from user collection', async () => {
-    const { userResponse, tokenResponse } = await createAndAuthUser();
-    const userId = userResponse.data.userID;
-    const token = tokenResponse.data.token;
     const isbn = BookProvider.getRandomIsbn();
 
     await BookService.add({ userId, token, isbns: isbn });
@@ -81,9 +87,6 @@ describe('Bookstore API - bookstore tests', () => {
   });
 
   test('should delete all books from user collection', async () => {
-    const { userResponse, tokenResponse } = await createAndAuthUser();
-    const userId = userResponse.data.userID;
-    const token = tokenResponse.data.token;
     const isbns = BookProvider.getIsbns(5);
 
     await BookService.add({ userId, token, isbns: isbns });
