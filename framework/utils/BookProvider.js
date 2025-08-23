@@ -12,4 +12,9 @@ const getRandomIsbn = () => {
   return isbns[index];
 };
 
-export default { getAll, getRange, getIsbns, getRandomIsbn };
+export default {
+  getAll,
+  getRange,
+  getIsbns,
+  getRandomIsbn
+};
