@@ -15,7 +15,7 @@ describe('Bookstore API - User creation tests', () => {
 
   test('should get info about user', async () => {
     const { user, userResponse, tokenResponse } = await createAndAuthUser();
-    const response = await UserService.get(userResponse.data.userID, tokenResponse.data.token);
+    const response = await UserService.get({ userId: userResponse.data.userID, token: tokenResponse.data.token });
 
     expect(response.status).toBe(200);
     expect(response.data.books).toBeDefined();
@@ -25,7 +25,7 @@ describe('Bookstore API - User creation tests', () => {
 
   test('should falit to get info about user without token', async () => {
     const { userResponse } = await createAndAuthUser();
-    const response = await UserService.get(userResponse.data.userID);
+    const response = await UserService.get({ userId: userResponse.data.userID });
 
     expect(response.status).toBe(401);
     expect(response.data.message).toBe('User not authorized!');
@@ -51,7 +51,7 @@ describe('Bookstore API - User creation tests', () => {
 
   test('should delete user with valid uuid and token', async () => {
     const { userResponse, tokenResponse } = await createAndAuthUser();
-    const response = await UserService.delete(userResponse.data.userID, tokenResponse.data.token);
+    const response = await UserService.remove({ userId: userResponse.data.userID, token: tokenResponse.data.token });
 
     expect(response.status).toBe(204);
     expect(response.data).toBe('');
@@ -60,7 +60,10 @@ describe('Bookstore API - User creation tests', () => {
   test("should fail to delete user if uuid and token don't match", async () => {
     const { userResponse } = await createAndAuthUser();
     const { tokenResponse: otherUserTokenResponse } = await createAndAuthUser();
-    const response = await UserService.delete(userResponse.data.userID, otherUserTokenResponse.data.token);
+    const response = await UserService.remove({
+      userId: userResponse.data.userID,
+      token: otherUserTokenResponse.data.token
+    });
 
     expect(response.status).toBe(200);
     expect(response.data.message).toMatch(/user id not correct!/i);
