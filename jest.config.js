@@ -178,7 +178,7 @@ const config = {
   // A map from regular expressions to paths to transformers
   transform: {
     '^.+\\.jsx?$': 'babel-jest'
-  }
+  },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   // transformIgnorePatterns: [
@@ -197,6 +197,12 @@ const config = {
 
   // Whether to use watchman for file crawling
   // watchman: true,
+
+  testEnvironment: 'allure-jest/node',
+  testTimeout: 60000,
+  testEnvironmentOptions: {
+    resultsDir: 'reports/allure-results'
+  }
 };
 
 module.exports = config;
