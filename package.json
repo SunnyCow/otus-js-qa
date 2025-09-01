@@ -4,13 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/main.js",
     "lint:ci": "eslint .",
     "lint": "eslint . --fix",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "codestyle": "run-s format lint",
-    "test": "jest"
+    "test": "jest",
+    "allure": "allure serve reports/allure-results",
+    "allure:history": "node scripts/copyAllureHistory.mjs",
+    "allure:ci": "npm run allure:history && allure generate reports/allure-results --clean --report-dir reports/allure-report",
+    "allure:ci:show": "allure open reports/allure-report"
   },
   "author": "Iaroslav Sannikov <sannikov.iaroslav@gmail.com>",
   "keywords": [],
@@ -19,6 +22,8 @@
     "@babel/core": "^7.28.0",
     "@babel/preset-env": "^7.28.0",
     "@eslint/js": "^9.18.0",
+    "allure-commandline": "^2.34.1",
+    "allure-jest": "^3.3.3",
     "babel-jest": "^30.0.5",
     "eslint": "^9.18.0",
     "globals": "^15.14.0",
