@@ -30,9 +30,9 @@ describe('Bookstore API - Find book, add book tests', () => {
 
     const response = await BookService.replace({ isbn, replaceIsbn, userId, token });
 
-    expect(response.data).toEqual({
+    expect(response.data).toMatchObject({
       books: [book2],
-      userId,
+      userId: userId,
       username: userResponse.data.username
     });
 

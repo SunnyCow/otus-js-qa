@@ -28,7 +28,7 @@ const create = async ({ username, password }) => {
 };
 
 const remove = async ({ userId, token }) => {
-  const response = await httpClient.remove(`/Account/v1/User/${userId}`, {
+  const response = await httpClient.delete(`/Account/v1/User/${userId}`, {
     headers: {
       Authorization: `Bearer ${token}`
     }

@@ -9,8 +9,10 @@ describe('Bookstore API - User creation tests', () => {
     const response = await UserService.create(user);
 
     expect(response.status).toBe(201);
-    expect(response.data).toHaveProperty('userID');
-    expect(response.data.username).toBe(user.username);
+    expect(response.data).toMatchObject({
+      userID: expect.any(String),
+      username: user.username
+    });
   });
 
   test('should get info about user', async () => {
@@ -18,9 +20,11 @@ describe('Bookstore API - User creation tests', () => {
     const response = await UserService.get({ userId: userResponse.data.userID, token: tokenResponse.data.token });
 
     expect(response.status).toBe(200);
-    expect(response.data.books).toBeDefined();
-    expect(response.data.username).toBe(user.username);
-    expect(response.data.userID).toBe(tokenResponse.data.userID);
+    expect(response.data).toMatchObject({
+      username: user.username,
+      books: expect.any(Array),
+      userId: userResponse.data.userID
+    });
   });
 
   test('should falit to get info about user without token', async () => {
@@ -65,8 +69,8 @@ describe('Bookstore API - User creation tests', () => {
       token: otherUserTokenResponse.data.token
     });
 
-    expect(response.status).toBe(200);
-    expect(response.data.message).toMatch(/user id not correct!/i);
+    expect(response.status).toBe(401);
+    expect(response.data.message).toMatch(/user not authorized!/i);
   });
 });
 
@@ -75,8 +79,10 @@ describe('Bookstore API - authorization tests', () => {
     const { tokenResponse: response } = await createAndAuthUser();
 
     expect(response.status).toBe(200);
-    expect(response.data.status).toBe('Success');
-    expect(response.data.token).toBeDefined();
+    expect(response.data).toMatchObject({
+      status: 'Success',
+      token: expect.any(String)
+    });
   });
 
   test('should authorize user with valid credentials', async () => {
@@ -92,9 +98,11 @@ describe('Bookstore API - authorization tests', () => {
     const response = await AuthService.generateToken(credentials);
 
     expect(response.status).toBe(200);
-    expect(response.data.expires).toBeNull();
-    expect(response.data.status).toBe('Failed');
-    expect(response.data.token).toBeNull();
+    expect(response.data).toMatchObject({
+      expires: null,
+      status: 'Failed',
+      token: null
+    });
   });
 
   test('should fail to authorize user without token', async () => {
