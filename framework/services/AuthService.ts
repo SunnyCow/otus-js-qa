@@ -1,32 +1,32 @@
 import httpClient from './HttpClient';
+import type { ApiResponse, AuthCredentials, AuthToken } from '../../types';
 
-const generateToken = async ({ username, password }) => {
-  const response = await httpClient.post('/Account/v1/GenerateToken', {
-    userName: username,
-    password: password
-  });
+const AuthService = {
+  generateToken: async ({ username, password }: AuthCredentials): Promise<ApiResponse<AuthToken>> => {
+    const response = await httpClient.post('/Account/v1/GenerateToken', {
+      userName: username,
+      password
+    });
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  },
 
-const isAuthorized = async ({ username, password }) => {
-  const response = await httpClient.post('/Account/v1/Authorized', {
-    userName: username,
-    password: password
-  });
+  isAuthorized: async ({ username, password }: AuthCredentials): Promise<ApiResponse<boolean>> => {
+    const response = await httpClient.post('/Account/v1/Authorized', {
+      userName: username,
+      password
+    });
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  }
+} as const;
 
-export default {
-  generateToken,
-  isAuthorized
-};
+export default AuthService;
