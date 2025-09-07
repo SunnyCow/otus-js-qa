@@ -1,24 +1,23 @@
+interface OrderItem {
+  price: number;
+  quantity: number;
+  name?: string;
+}
+
+type ScoreRecord = Record<string, number>;
+
 /**
  * Проверка имени пользователя
- * @param {string} name
- * @returns {boolean}
  */
-export const nameIsValid = (name) => typeof name === 'string' && name.length >= 2 && /^[a-z]+$/.test(name);
+export const nameIsValid = (name: any): boolean => typeof name === 'string' && name.length >= 2 && /^[a-z]+$/.test(name);
 
 /**
  * Удаление пробелов из строки
- *
- * @param {string} text
- * @returns {string}
  */
-export const fullTrim = (text) => (text ?? '').replace(/\s+/g, '');
+export const fullTrim = (text?: string | null): string => (text ?? '').replace(/\s+/g, '');
 
 /**
  * Подсчёт суммы заказа
- *
- * @param {[{quantity: number, name?: string, price: number}]} items
- * @param {number} discount
- * @returns {number}
  * @throws Вернёт ошибку, если скидка не число и больше 99 или меньше 0
  * @example getTotal([{ price: 10, quantity: 10 }]) // 100
  * @example getTotal([{ price: 10, quantity: 1 }]) // 10
@@ -27,7 +26,7 @@ export const fullTrim = (text) => (text ?? '').replace(/\s+/g, '');
  * @example getTotal([{ price: 10, quantity: 10 }], 10) // 90
  * @example getTotal([{ price: 10, quantity: 10 }], 100) // throws 'Процент скидки должен быть от 0 до 99'
  */
-export const getTotal = (items = [], discount = 0) => {
+export const getTotal = (items: OrderItem[] = [], discount: any = 0): number => {
   if (typeof discount !== 'number') {
     throw new Error('Скидка должна быть числом');
   }
@@ -41,20 +40,17 @@ export const getTotal = (items = [], discount = 0) => {
 
 /**
  * Подсчёт общего количества очков
- *
- * @param {{[key: string]}: number} scores
- * @returns {number}
  * @throws {TypeError} Вернёт ошибку, если был передан не объект
  * @throws {TypeError} Вернёт ошибку, если объект содержит что-то, кроме чисел
  */
-export const getScore = (scores) => {
+export const getScore = (scores: any): number => {
   if (typeof scores !== 'object' || scores === null || Array.isArray(scores)) {
     throw new TypeError('Argument is not an object');
   }
 
   let totalScore = 0;
 
-  for (let score in scores) {
+  for (const score in scores) {
     if (typeof scores[score] !== 'number' || Number.isNaN(scores[score])) {
       throw new TypeError('The object must only contain numbers');
     }
