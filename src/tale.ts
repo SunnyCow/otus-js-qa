@@ -1,4 +1,4 @@
-function kolobok(name) {
+function kolobok(name: any) {
   switch (name.toLowerCase()) {
     case 'дедушка':
       return 'Я от дедушки ушёл ^_^';
@@ -11,7 +11,7 @@ function kolobok(name) {
   }
 }
 
-function newYear(name) {
+function newYear(name: any) {
   switch (name.toLowerCase()) {
     case 'дед мороз':
     case 'снегурочка':

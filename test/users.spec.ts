@@ -2,6 +2,7 @@ import UserService from '../framework/services/UserService';
 import AuthService from '../framework/services/AuthService';
 import generateUserCredentials from '../framework/fixtures/userFixture';
 import createAndAuthUser from '../framework/utils/createAndAuthUser';
+import { ApiError } from 'types';
 
 describe('Bookstore API - User creation tests', () => {
   test('should create user with valid credentials', async () => {
@@ -29,7 +30,7 @@ describe('Bookstore API - User creation tests', () => {
 
   test('should falit to get info about user without token', async () => {
     const { userResponse } = await createAndAuthUser();
-    const response = await UserService.get({ userId: userResponse.data.userID });
+    const response = await UserService.get({ userId: userResponse.data.userID, token: '' });
 
     expect(response.status).toBe(401);
     expect(response.data.message).toBe('User not authorized!');
@@ -69,8 +70,10 @@ describe('Bookstore API - User creation tests', () => {
       token: otherUserTokenResponse.data.token
     });
 
+    const errorData = response.data as ApiError;
+
     expect(response.status).toBe(401);
-    expect(response.data.message).toMatch(/user not authorized!/i);
+    expect(errorData.message).toMatch(/user not authorized!/i);
   });
 });
 
