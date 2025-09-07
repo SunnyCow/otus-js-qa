@@ -1,95 +1,90 @@
 import httpClient from './HttpClient';
+import type { ApiResponse, Book, AddBooksParams } from '../../types';
 
-const add = async ({ userId, isbns, token }) => {
-  isbns = Array.isArray(isbns) ? isbns : [isbns];
+const BookService = {
+  add: async ({ userId, isbns, token }: AddBooksParams): Promise<ApiResponse<Book[]>> => {
+    const normalizedIsbns = Array.isArray(isbns) ? isbns : [isbns];
 
-  const response = await httpClient.post(
-    `/BookStore/v1/Books`,
-    {
-      userId,
-      collectionOfIsbns: isbns.map((isbn) => ({ isbn }))
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
+    const response = await httpClient.post(
+      `/BookStore/v1/Books`,
+      {
+        userId,
+        collectionOfIsbns: normalizedIsbns.map((isbn) => ({ isbn }))
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` }
       }
-    }
-  );
+    );
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  },
 
-const replace = async ({ isbn, replaceIsbn, userId, token }) => {
-  const response = await httpClient.put(
-    `/BookStore/v1/Books/${isbn}`,
-    {
-      userId,
-      isbn: replaceIsbn
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`
+  replace: async ({
+    isbn,
+    replaceIsbn,
+    userId,
+    token
+  }: { isbn: string; replaceIsbn: string; userId: string; token: string }): Promise<ApiResponse<Book>> => {
+    const response = await httpClient.put(
+      `/BookStore/v1/Books/${isbn}`,
+      {
+        userId,
+        isbn: replaceIsbn
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` }
       }
-    }
-  );
+    );
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  },
 
-const get = async ({ isbn }) => {
-  const response = await httpClient.get(`/BookStore/v1/Book?ISBN=${isbn}`);
+  get: async ({ isbn }: { isbn: any }): Promise<ApiResponse<Book>> => {
+    const response = await httpClient.get(`/BookStore/v1/Book?ISBN=${isbn}`);
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  },
 
-const removeOne = async ({ isbn, userId, token }) => {
-  const response = await httpClient.delete(`/BookStore/v1/Book`, {
-    data: {
-      isbn,
-      userId
-    },
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+  removeOne: async ({
+    isbn,
+    userId,
+    token
+  }: { isbn: string; userId: string; token: string }): Promise<ApiResponse<{}>> => {
+    const response = await httpClient.delete(`/BookStore/v1/Book`, {
+      data: { isbn, userId },
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  },
 
-const removeAll = async ({ userId, token }) => {
-  const response = await httpClient.delete(`/BookStore/v1/Books?UserId=${userId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+  removeAll: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<{}>> => {
+    const response = await httpClient.delete(`/BookStore/v1/Books?UserId=${userId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-  return {
-    headers: response.headers,
-    status: response.status,
-    data: response.data
-  };
-};
+    return {
+      headers: response.headers as Record<string, string>,
+      status: response.status,
+      data: response.data
+    };
+  }
+} as const;
 
-export default {
-  replace,
-  add,
-  get,
-  removeOne,
-  removeAll
-};
+export default BookService;
