@@ -1,4 +1,14 @@
-const generateUserCredentials = (options = {}) => {
+interface UserCredentials {
+  username: string;
+  password: string;
+}
+
+interface UserFixtureOptions {
+  valid?: boolean;
+  reason?: 'weakPassword' | 'missingUsername' | 'missingPassword';
+}
+
+const generateUserCredentials = (options: UserFixtureOptions = {}): UserCredentials => {
   const { valid = true, reason = 'weakPassword' } = options;
 
   if (!valid) {
