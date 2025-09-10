@@ -28,7 +28,12 @@ const BookService = {
     replaceIsbn,
     userId,
     token
-  }: { isbn: string; replaceIsbn: string; userId: string; token: string }): Promise<ApiResponse<Book>> => {
+  }: {
+    isbn: string;
+    replaceIsbn: string;
+    userId: string;
+    token: string;
+  }): Promise<ApiResponse<Book>> => {
     const response = await httpClient.put(
       `/BookStore/v1/Books/${isbn}`,
       {
@@ -61,7 +66,11 @@ const BookService = {
     isbn,
     userId,
     token
-  }: { isbn: string; userId: string; token: string }): Promise<ApiResponse<{}>> => {
+  }: {
+    isbn: string;
+    userId: string;
+    token: string;
+  }): Promise<ApiResponse<{}>> => {
     const response = await httpClient.delete(`/BookStore/v1/Book`, {
       data: { isbn, userId },
       headers: { Authorization: `Bearer ${token}` }

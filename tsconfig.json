@@ -17,14 +17,6 @@
     "declaration": true,
     "baseUrl": "./"
   },
-  "include": [
-    "src/**/*",
-    "framework/**/*",
-    "test/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "reports"
-  ]
+  "include": ["src/**/*", "framework/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist", "reports"]
 }

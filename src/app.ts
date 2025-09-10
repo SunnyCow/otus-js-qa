@@ -4,12 +4,11 @@ interface OrderItem {
   name?: string;
 }
 
-type ScoreRecord = Record<string, number>;
-
 /**
  * Проверка имени пользователя
  */
-export const nameIsValid = (name: any): boolean => typeof name === 'string' && name.length >= 2 && /^[a-z]+$/.test(name);
+export const nameIsValid = (name: any): boolean =>
+  typeof name === 'string' && name.length >= 2 && /^[a-z]+$/.test(name);
 
 /**
  * Удаление пробелов из строки
