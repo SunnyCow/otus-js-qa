@@ -1,15 +1,40 @@
 name: api-tests
-on: [push]
+
+on:
+  push:
+  workflow_dispatch:
 
 jobs:
-    install:
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v4
-            - uses: actions/setup-node@v4
-              with:
-                node-version: 22.17.1
-                cache: 'npm'
-            - run: npm ci
-            - run: npm run lint:ci
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
 
+  lint:
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint:ci
+
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
