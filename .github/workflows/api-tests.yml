@@ -43,3 +43,25 @@ jobs:
       - run: npm test
         env:
             BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
+
+  allure-report:
+      runs-on: ubuntu-latest
+      needs: test
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-node@v4
+          with:
+            node-version: 22.17.1
+        - run: npm ci
+        - run: allure:ci 
+        - name: Upload as artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: allure-report
+            path: allure-report
+        - name: Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./allure-report
+            publish_branch: gh-pages
