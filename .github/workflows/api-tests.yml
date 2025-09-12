@@ -1,8 +1,11 @@
 name: api-tests
 
 on:
+  pull_request:
+    types:
+      - closed
   push:
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   install:
@@ -37,5 +40,6 @@ jobs:
           node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
-      - run: echo "${{vars.ENV_FILE}}" >> .env
       - run: npm test
+        env:
+            BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
