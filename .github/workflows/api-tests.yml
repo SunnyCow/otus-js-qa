@@ -53,7 +53,7 @@ jobs:
           with:
             node-version: 22.17.1
         - run: npm ci
-        - run: allure:ci 
+        - run: npm run allure:ci 
         - name: Upload as artifact
           uses: actions/upload-artifact@v4
           with:
