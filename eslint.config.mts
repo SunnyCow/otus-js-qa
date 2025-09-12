@@ -21,11 +21,12 @@ export default tseslint.config(
   {
     files: ['**/*.ts'],
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn'
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-empty-object-type': 'warn'
     }
   },
   {
     files: ['test/**'],
     ...jest.configs['flat/recommended']
-  }
+  },
 );
