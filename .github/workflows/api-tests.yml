@@ -1,0 +1,119 @@
+name: api-tests
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
+      
+
+  lint:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: npm
+      - run: npm ci
+      - run: npm run lint:ci
+
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
+
+      - name: Download previous history
+        run: |
+          git fetch origin gh-pages --depth=1 || echo "no gh-pages yet"
+          mkdir -p reports/allure-results/history
+          if git show origin/gh-pages:history >/dev/null 2>&1; then
+            git checkout origin/gh-pages -- history
+            cp -r history reports/allure-results/
+          fi
+
+      - run: npx zx scripts/allure.ci.zx.mjs
+
+        env:
+          BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
+
+      - name: Upload reports artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-reports
+          path: reports/allure-report
+
+  deploy:
+    if: always()
+    needs: test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download reports artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-reports
+          path: reports/allure-report
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: reports/allure-report
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Push history back to gh-pages
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          # Fetch or create gh-pages branch
+          git fetch origin gh-pages || echo "no gh-pages yet"
+          git checkout gh-pages || git checkout --orphan gh-pages
+
+          # Copy new history from artifact
+          mkdir -p history
+          cp -r reports/allure-report/history/* history/ || echo "no new history"
+
+          # Commit & push
+          git add history
+          git commit -m "Update allure history [skip ci]" || echo "No changes to commit"
+          git push origin gh-pages
+
