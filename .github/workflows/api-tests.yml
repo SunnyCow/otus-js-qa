@@ -5,7 +5,7 @@ on:
     types:
       - closed
   push:
-  workflow_dispatch: {}
+  workflow_dispatch:
 
 jobs:
   install:
@@ -40,28 +40,39 @@ jobs:
           node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
-      - run: npm test
+      - run: npx zx scripts/allure.ci.zx.mjs
         env:
-            BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
+          TEST_ALLURE_REPO_URL: "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          TEST_ALLURE_BRANCH_NAME: allure
+          TEST_ALLURE_HISTORY_DIR: history
+      - name: Upload reports artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-reports
+          path: reports/allure-report
 
-  allure-report:
-      runs-on: ubuntu-latest
-      needs: test
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 22.17.1
-        - run: npm ci
-        - run: npm run allure:ci 
-        - name: Upload as artifact
-          uses: actions/upload-artifact@v4
-          with:
-            name: allure-report
-            path: allure-report
-        - name: Deploy to GitHub Pages
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./allure-report
-            publish_branch: gh-pages
+  deploy:
+    if: always()
+    needs: test
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download reports artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-reports
+          path: reports/allure-report
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'reports/allure-report'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

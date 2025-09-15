@@ -12,7 +12,7 @@
     "codestyle": "run-s format lint type-check",
     "test": "jest",
     "allure": "allure serve reports/allure-results",
-    "allure:history": "node scripts/copyAllureHistory.mjs",
+    "allure:history": "node scripts/allure-history.mjs",
     "allure:ci": "npm run allure:history && allure generate reports/allure-results --clean --report-dir reports/allure-report",
     "allure:ci:show": "allure open reports/allure-report"
   },
