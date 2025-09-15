@@ -46,7 +46,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.14
+          node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
       - run: npx zx scripts/allure.ci.zx.mjs
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-reports
-          path: reports/allure-report
+          path: 'reports/allure-report'
 
   deploy:
     if: always()
@@ -80,7 +80,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: 'reports/allure-report'
       - name: Deploy to GitHub Pages
