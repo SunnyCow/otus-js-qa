@@ -19,9 +19,9 @@ const config: Config.InitialOptions = {
   testEnvironment: 'allure-jest/node',
   testTimeout: 60_000,
   testEnvironmentOptions: {
-    resultsDir: 'reports/allure-results',
+    resultsDir: 'reports/allure-results'
   },
-  setupFiles: ['dotenv/config'],
+  setupFiles: ['dotenv/config']
 };
 
 export default config;

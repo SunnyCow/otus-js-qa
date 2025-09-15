@@ -28,5 +28,5 @@ export default tseslint.config(
   {
     files: ['test/**'],
     ...jest.configs['flat/recommended']
-  },
+  }
 );
