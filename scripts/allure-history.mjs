@@ -17,7 +17,7 @@ async function copyHistory() {
     // Проверяем наличие директории history в allure-report
     const historyExists = await fs.pathExists(historySourcePath);
     if (!historyExists) {
-      console.error(
+      console.warn(
         `Директория history не найдена в ${historySourcePath}. Если это не первый запуск скрипта, проверьте правильность пути.`
       );
       return;

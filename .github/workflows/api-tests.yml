@@ -45,12 +45,28 @@ jobs:
           node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
+
+      - name: Download Allure history
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-history
+          path: reports/allure-results/history
+        continue-on-error: true 
+
       - run: npx zx scripts/allure.ci.zx.mjs
         env:
           TEST_ALLURE_REPO_URL: 'https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git'
           TEST_ALLURE_BRANCH_NAME: allure
           TEST_ALLURE_HISTORY_DIR: history
           BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
+
+      - name: Upload Allure history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-history
+          path: reports/allure-report/history
+
       - name: Upload reports artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -66,13 +82,20 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
-
     steps:
       - name: Download reports artifact
         uses: actions/download-artifact@v4
         with:
           name: allure-reports
           path: reports/allure-report
+
+      - name: Download Allure history
+        uses: actions/download-artifact@v4
+        with:
+          name: allure-history
+          path: reports/allure-report/history
+        continue-on-error: true
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
