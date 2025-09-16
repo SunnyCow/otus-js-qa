@@ -16,18 +16,7 @@ concurrency:
 jobs:
   install:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22.17.1
-          cache: 'npm'
-      - run: npm ci
-      
 
-  lint:
-    needs: install
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -35,12 +24,11 @@ jobs:
           node-version: 22.17.1
           cache: npm
       - run: npm ci
-      - run: npm run lint:ci
 
-
-  test:
-    needs: lint
+  lint:
     runs-on: ubuntu-latest
+    needs: install
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,26 +36,25 @@ jobs:
           node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
+      - run: npm run lint:ci
 
-      - name: Download previous history
-        run: |
-          git fetch origin gh-pages --depth=1 || echo "no gh-pages yet"
-          mkdir -p reports/allure-results/history
-          if git show origin/gh-pages:history >/dev/null 2>&1; then
-            git checkout origin/gh-pages -- history
-            cp -r history reports/allure-results/
-          fi
+  test:
+    runs-on: ubuntu-latest
+    needs: lint
 
-      # Run tests + generate allure report
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.17.1
+          cache: 'npm'
+      - run: npm ci
+      - run: echo "${{vars.ENV_FILE}}" >> .env
       - run: npx zx scripts/allure.ci.zx.mjs
         env:
-          BOOKSTORE_API_URL: ${{ vars.BOOKSTORE_API_URL }}
-
-      - name: Sync generated history
-        run: |
-          rm -rf reports/allure-results/history
-          cp -r reports/allure-report/history reports/allure-results/ || echo "no history generated"
-
+          TEST_ALLURE_REPO_URL: 'https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git'
+          TEST_ALLURE_BRANCH_NAME: allure
+          TEST_ALLURE_HISTORY_DIR: history
       - name: Upload reports artifact
         if: always()
         uses: actions/upload-artifact@v4
@@ -83,38 +70,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
+    steps:
       - name: Download reports artifact
         uses: actions/download-artifact@v4
         with:
           name: allure-reports
           path: reports/allure-report
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: reports/allure-report
-
+          path: 'reports/allure-report'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-      - name: Push history back to gh-pages
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git fetch origin gh-pages || echo "no gh-pages yet"
-          git checkout gh-pages || git checkout --orphan gh-pages
-
-          mkdir -p history
-          cp -r reports/allure-report/history/* history/ || echo "no new history"
-
-          git add history
-          git commit -m "Update allure history [skip ci]" || echo "No changes to commit"
-          git push origin gh-pages
