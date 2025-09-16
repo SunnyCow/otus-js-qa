@@ -2,8 +2,8 @@ import fs, { mkdirp } from 'fs-extra';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execSync } from 'node:child_process';
+import os from 'node:os';
 import config from './allure-config.mjs';
-import { tmpdir } from 'zx';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,14 +11,12 @@ const __dirname = path.dirname(__filename);
 function createEmptyBranch(repoUrl, branchName, tempDir) {
   try {
     execSync(`git init`, { cwd: tempDir, stdio: 'inherit' });
-    execSync('git config user.email "bot@otus.qa"', { cwd: tempDir, stdio: 'inherit' });
-    execSync('git config user.name "Bot"', { cwd: tempDir, stdio: 'inherit' });
+    execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"', { cwd: tempDir, stdio: 'inherit' });
+    execSync('git config user.name "github-actions[bot]"', { cwd: tempDir, stdio: 'inherit' });
     execSync(`git remote add origin ${repoUrl}`, { cwd: tempDir, stdio: 'inherit' });
 
     execSync(`git checkout --orphan ${branchName}`, { cwd: tempDir, stdio: 'inherit' });
-
     execSync(`git commit --allow-empty -m "init"`, { cwd: tempDir, stdio: 'inherit' });
-
     execSync(`git push --set-upstream origin ${branchName}`, { cwd: tempDir, stdio: 'inherit' });
 
     console.log(`Пустая ветка ${branchName} успешно создана и опубликована.`);
@@ -30,7 +28,7 @@ function createEmptyBranch(repoUrl, branchName, tempDir) {
 }
 
 async function fetchHistory() {
-  const tempDir = await tmpdir();
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'allure-history-'));
   const allureResultsDir = path.resolve(__dirname, '../reports/allure-results');
   const historyDestPath = path.join(allureResultsDir, config.historyDir);
 
