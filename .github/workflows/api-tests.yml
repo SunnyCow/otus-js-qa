@@ -49,7 +49,7 @@ jobs:
           node-version: 22.17.1
           cache: 'npm'
       - run: npm ci
-      - run: echo "${{vars.ENV_FILE}}" >> .env
+      - run: echo "${{ vars.ENV_FILE }}" > .env
       - run: npx zx scripts/allure.ci.zx.mjs
         env:
           TEST_ALLURE_REPO_URL: 'https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git'
