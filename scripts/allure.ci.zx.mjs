@@ -6,6 +6,7 @@ import fs from 'fs-extra';
 const ALLURE_RESULT_PATH = process.env.ALLURE_RESULT_PATH ?? './reports/allure-results';
 const ALLURE_REPORT_PATH = process.env.ALLURE_REPORT_PATH ?? './reports/allure-report';
 
+await $`ls -al`;
 await fs.remove(ALLURE_RESULT_PATH);
 const exitCode = await $`npm test`.nothrow().exitCode;
 await $`node scripts/allure-load.mjs`;
