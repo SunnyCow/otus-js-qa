@@ -52,7 +52,7 @@ const BookService = {
     };
   },
 
-  get: async ({ isbn }: { isbn: any }): Promise<ApiResponse<Book>> => {
+  get: async ({ isbn }: { isbn: string }): Promise<ApiResponse<Book>> => {
     const response = await httpClient.get(`/BookStore/v1/Book?ISBN=${isbn}`);
 
     return {
@@ -70,7 +70,7 @@ const BookService = {
     isbn: string;
     userId: string;
     token: string;
-  }): Promise<ApiResponse<{}>> => {
+  }): Promise<ApiResponse<unknown>> => {
     const response = await httpClient.delete(`/BookStore/v1/Book`, {
       data: { isbn, userId },
       headers: { Authorization: `Bearer ${token}` }
@@ -83,7 +83,7 @@ const BookService = {
     };
   },
 
-  removeAll: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<{}>> => {
+  removeAll: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<unknown>> => {
     const response = await httpClient.delete(`/BookStore/v1/Books?UserId=${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });

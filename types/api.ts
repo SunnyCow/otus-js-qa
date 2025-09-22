@@ -1,4 +1,4 @@
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
   headers: Record<string, string>;
   status: number;
   data: T;

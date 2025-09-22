@@ -2,11 +2,12 @@ import BookService from '../framework/services/BookService';
 import UserService from '../framework/services/UserService';
 import createAndAuthUser from '../framework/utils/createAndAuthUser';
 import BookProvider from '../framework/utils/BookProvider';
+import { Book } from '../types/book';
 
 describe('Bookstore API - Find book, add book tests', () => {
   const isbnsArray = [BookProvider.getRandomIsbn(), BookProvider.getIsbns(4)];
 
-  test.each(isbnsArray)('should add books %s', async (isbns: any) => {
+  test.each(isbnsArray)('should add books %s', async (isbns: string|string[]) => {
     const { userResponse, tokenResponse } = await createAndAuthUser();
     const userId = userResponse.data.userID;
     const token = tokenResponse.data.token;
@@ -37,7 +38,7 @@ describe('Bookstore API - Find book, add book tests', () => {
     });
 
     const userData = await UserService.get({ userId, token });
-    const userBooks = userData.data.books.map((b: any) => b.isbn);
+    const userBooks = userData.data.books.map((b: Book) => b.isbn);
 
     expect(userBooks).toContain(replaceIsbn);
     expect(userBooks).not.toContain(isbn);
@@ -52,7 +53,7 @@ describe('Bookstore API - Find book, add book tests', () => {
   });
 
   test('should return 400 if the book is not found', async () => {
-    const response = await BookService.get({ isbn: 1111 });
+    const response = await BookService.get({ isbn: "1111" });
 
     expect(response.status).toBe(400);
     expect(response.data.message).toMatch(/ISBN supplied is not/);
@@ -60,8 +61,8 @@ describe('Bookstore API - Find book, add book tests', () => {
 });
 
 describe('Book removal tests', () => {
-  let userId: any;
-  let token: any;
+  let userId: string;
+  let token: string;
 
   beforeEach(async () => {
     const { userResponse, tokenResponse } = await createAndAuthUser();
@@ -76,14 +77,14 @@ describe('Book removal tests', () => {
 
     let userData = await UserService.get({ userId, token });
 
-    expect(userData.data.books.map((b: any) => b.isbn)).toContain(isbn);
+    expect(userData.data.books.map((b: Book) => b.isbn)).toContain(isbn);
 
     const removeResponse = await BookService.removeOne({ isbn, userId, token });
     userData = await UserService.get({ userId, token });
 
     expect(removeResponse.data).toEqual('');
     expect(removeResponse.status).toBe(204);
-    expect(userData.data.books.map((b: any) => b.isbn)).not.toContain(isbn);
+    expect(userData.data.books.map((b: Book) => b.isbn)).not.toContain(isbn);
   });
 
   test('should delete all books from user collection', async () => {
@@ -93,7 +94,7 @@ describe('Book removal tests', () => {
 
     let userData = await UserService.get({ userId, token });
 
-    expect(userData.data.books.map((b: any) => b.isbn)).toEqual(expect.arrayContaining(isbns));
+    expect(userData.data.books.map((b: Book) => b.isbn)).toEqual(expect.arrayContaining(isbns));
 
     const removeResponse = await BookService.removeAll({ userId, token });
 

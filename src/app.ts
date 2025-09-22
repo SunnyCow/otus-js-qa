@@ -7,7 +7,7 @@ interface OrderItem {
 /**
  * Проверка имени пользователя
  */
-export const nameIsValid = (name: any): boolean =>
+export const nameIsValid = (name: unknown): boolean =>
   typeof name === 'string' && name.length >= 2 && /^[a-z]+$/.test(name);
 
 /**
@@ -25,7 +25,7 @@ export const fullTrim = (text?: string | null): string => (text ?? '').replace(/
  * @example getTotal([{ price: 10, quantity: 10 }], 10) // 90
  * @example getTotal([{ price: 10, quantity: 10 }], 100) // throws 'Процент скидки должен быть от 0 до 99'
  */
-export const getTotal = (items: OrderItem[] = [], discount: any = 0): number => {
+export const getTotal = (items: OrderItem[] = [], discount: unknown = 0): number => {
   if (typeof discount !== 'number') {
     throw new Error('Скидка должна быть числом');
   }
@@ -42,18 +42,19 @@ export const getTotal = (items: OrderItem[] = [], discount: any = 0): number => 
  * @throws {TypeError} Вернёт ошибку, если был передан не объект
  * @throws {TypeError} Вернёт ошибку, если объект содержит что-то, кроме чисел
  */
-export const getScore = (scores: any): number => {
+export const getScore = (scores: unknown): number => {
   if (typeof scores !== 'object' || scores === null || Array.isArray(scores)) {
     throw new TypeError('Argument is not an object');
   }
+  const scoreObject = scores as Record<string, unknown>;
 
   let totalScore = 0;
 
-  for (const score in scores) {
-    if (typeof scores[score] !== 'number' || Number.isNaN(scores[score])) {
+  for (const key in scoreObject) {
+    if (typeof scoreObject[key] !== 'number' || Number.isNaN(scoreObject[key])) {
       throw new TypeError('The object must only contain numbers');
     }
-    totalScore += scores[score];
+    totalScore += scoreObject[key];
   }
 
   return totalScore;

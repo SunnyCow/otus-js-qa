@@ -4,11 +4,11 @@ describe('nameIsValid function', () => {
   const validCases = ['dudoser', 'fr'];
   const invalidCases = ['x', 'Fr', 'eric cartman', null, undefined, ' ', '', 707];
 
-  test.each(validCases)('"%s" should be valid', (name: any) => {
+  test.each(validCases)('"%s" should be valid', (name: unknown) => {
     expect(nameIsValid(name)).toBe(true);
   });
 
-  test.each(invalidCases)('"%s" should be invalid', (name: any) => {
+  test.each(invalidCases)('"%s" should be invalid', (name: unknown) => {
     expect(nameIsValid(name)).toBe(false);
   });
 });
@@ -20,7 +20,7 @@ describe('fullTrim function', () => {
     expect(fullTrim('h e l l o !')).toBe('hello!');
   });
 
-  test.each(returnEmptyString)('should return empty string for "%s"', (input: any) => {
+  test.each(returnEmptyString)('should return empty string for "%s"', (input: null|undefined|string) => {
     expect(fullTrim(input)).toBe('');
   });
 
@@ -67,7 +67,7 @@ describe('getTotal function', () => {
     expect(getTotal(items)).toBe(0);
   });
 
-  test.each(nonNumericDiscounts)('should throw error if discount is non-numeric: %p', (input: any) => {
+  test.each(nonNumericDiscounts)('should throw error if discount is non-numeric: %p', (input: unknown) => {
     expect(() => getTotal([{ price: 10, quantity: 1 }], input)).toThrow('Скидка должна быть числом');
   });
 });
@@ -91,11 +91,11 @@ describe('getScore function', () => {
     expect(getScore(scores)).toBe(50 + 28 + 55);
   });
 
-  test.each(nonObjectInput)('should throw an error if input is not an object: %p', (input: any) => {
+  test.each(nonObjectInput)('should throw an error if input is not an object: %p', (input: unknown) => {
     expect(() => getScore(input)).toThrow(TypeError('Argument is not an object'));
   });
 
-  test.each(invalidObjects)('should throw an error if object contains values other than numbers: %p', (input: any) => {
+  test.each(invalidObjects)('should throw an error if object contains values other than numbers: %p', (input: unknown) => {
     expect(() => getScore(input)).toThrow(TypeError('The object must only contain numbers'));
   });
 });
