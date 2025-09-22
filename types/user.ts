@@ -1,7 +1,9 @@
+import { Book } from '../types/book';
+
 export interface User {
   userID: string;
   username: string;
-  books: any[];
+  books: Book[];
   message?: string;
 }
 
