@@ -27,7 +27,7 @@ const UserService = {
     };
   },
 
-  remove: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<{} | ApiError>> => {
+  remove: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<unknown | ApiError>> => {
     const response = await httpClient.delete(`/Account/v1/User/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
