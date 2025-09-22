@@ -2,10 +2,7 @@ import httpClient from './HttpClient';
 import type { ApiResponse, User, AuthCredentials, ApiError } from '../../types';
 
 const UserService = {
-  get: async ({
-    userId,
-    token
-  }: { userId: string; token: string }): Promise<ApiResponse<User>> => {
+  get: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<User>> => {
     const response = await httpClient.get(`/Account/v1/User/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });
@@ -30,10 +27,7 @@ const UserService = {
     };
   },
 
-  remove: async ({
-    userId,
-    token
-  }: { userId: string; token: string }): Promise<ApiResponse<{} | ApiError>> => {
+  remove: async ({ userId, token }: { userId: string; token: string }): Promise<ApiResponse<{} | ApiError>> => {
     const response = await httpClient.delete(`/Account/v1/User/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     });

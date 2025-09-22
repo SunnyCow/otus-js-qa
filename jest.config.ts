@@ -10,17 +10,18 @@ const config: Config.InitialOptions = {
         useESM: false,
         tsconfig: {
           target: 'es2020',
-          module: 'commonjs',
-        },
-      },
-    ],
+          module: 'commonjs'
+        }
+      }
+    ]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   testEnvironment: 'allure-jest/node',
   testTimeout: 60_000,
   testEnvironmentOptions: {
-    resultsDir: 'reports/allure-results',
+    resultsDir: 'reports/allure-results'
   },
+  setupFiles: ['dotenv/config']
 };
 
 export default config;
